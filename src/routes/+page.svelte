@@ -1,17 +1,19 @@
 <script>
 	import { onMount } from 'svelte';
+	import 'leaflet/dist/leaflet.css';
 
-	// Dynamically import Leaflet only on the client side
 	let L;
 	let map;
 
 	onMount(async () => {
 		if (typeof window !== 'undefined') {
+			// Dynamically import Leaflet on the client-side
 			L = await import('leaflet');
-			await import('leaflet/dist/leaflet.css');
 
 			// Initialize the map
-			map = L.map('map').setView([45.75, 4.85], 13);
+			map = L.map('map', {
+				preferCanvas: true // Enable canvas rendering
+			}).setView([45.75, 4.85], 13);
 
 			// Add a tile layer
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -31,9 +33,23 @@
 				)
 			).json();
 
-			// Add GeoJSON layer to the map
-			L.geoJSON(compostBins).addTo(map);
-			L.geoJSON(garbageBins).addTo(map);
+			// Create a canvas renderer for the markers
+			const canvasRenderer = L.canvas();
+
+			// Create marker layers for compost and garbage bins
+			const compostMarkers = L.geoJSON(compostBins, {
+				pointToLayer: (feature, latlng) =>
+					L.circleMarker(latlng, {
+						renderer: canvasRenderer
+					})
+			}).addTo(map);
+
+			const garbageMarkers = L.geoJSON(garbageBins, {
+				pointToLayer: (feature, latlng) =>
+					L.circleMarker(latlng, {
+						renderer: canvasRenderer
+					})
+			}).addTo(map);
 		}
 	});
 </script>
