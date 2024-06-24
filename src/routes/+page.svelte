@@ -53,7 +53,7 @@
 
 			const householdWasteBins = await (
 				await fetch(
-					'https://data.grandlyon.com/geoserver/metropole-de-lyon/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=metropole-de-lyon:gic_collecte.siloverre&outputFormat=application/json&SRSNAME=EPSG:4171&startIndex=0&sortBy=gid'
+					'https://data.grandlyon.com/geoserver/metropole-de-lyon/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=metropole-de-lyon:gic_collecte.orduresmenageres&outputFormat=application/json&SRSNAME=EPSG:4171&startIndex=0&sortBy=gid'
 				)
 			).json();
 
