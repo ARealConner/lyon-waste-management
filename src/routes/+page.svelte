@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import 'leaflet/dist/leaflet.css';
 
-	let L;
+	let L: typeof import('leaflet');
 	let map;
 
 	onMount(async () => {
@@ -68,12 +68,13 @@
 
 			// Create marker layers for each category
 			const compostMarkers = L.geoJSON(compostBins, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'green',
 						fillColor: 'green',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -85,12 +86,13 @@
 			});
 
 			const garbageMarkers = L.geoJSON(garbageBins, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'red',
 						fillColor: 'red',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -102,12 +104,13 @@
 			});
 
 			const wasteCollectionCenterMarkers = L.geoJSON(wasteCollectionCenters, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'blue',
 						fillColor: 'blue',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -119,12 +122,13 @@
 			});
 
 			const bottleCollectionMarkers = L.geoJSON(bottleCollection, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'orange',
 						fillColor: 'orange',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -136,12 +140,13 @@
 			});
 
 			const glassBinMarkers = L.geoJSON(glassBins, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'purple',
 						fillColor: 'purple',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -153,12 +158,13 @@
 			});
 
 			const householdWasteBinMarkers = L.geoJSON(householdWasteBins, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'brown',
 						fillColor: 'brown',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -170,12 +176,13 @@
 			});
 
 			const recyclingDropOffMarkers = L.geoJSON(recyclingDropOff, {
-				pointToLayer: (feature, latlng) =>
+				pointToLayer: (_feature, latlng) =>
 					L.circleMarker(latlng, {
 						renderer: canvasRenderer,
 						color: 'yellow',
 						fillColor: 'yellow',
-						fillOpacity: 0.7
+						fillOpacity: 0.7,
+						radius: 8 // Added radius property
 					}),
 				onEachFeature: (feature, layer) => {
 					// Create a popup with the feature properties
@@ -187,16 +194,19 @@
 			});
 
 			// Create a layer control and add it to the map
-			const layerControl = L.control
-				.layers(null, {
-					'Compost Bins': compostMarkers,
-					'Garbage Bins': garbageMarkers,
-					'Waste Collection Centers': wasteCollectionCenterMarkers,
-					'Bottle Collection': bottleCollectionMarkers,
-					'Glass Bins': glassBinMarkers,
-					'Household Waste Bins': householdWasteBinMarkers,
-					'Recycling Drop-off': recyclingDropOffMarkers
-				})
+			L.control
+				.layers(
+					{},
+					{
+						'Compost Bins': compostMarkers,
+						'Garbage Bins': garbageMarkers,
+						'Waste Collection Centers': wasteCollectionCenterMarkers,
+						'Bottle Collection': bottleCollectionMarkers,
+						'Glass Bins': glassBinMarkers,
+						'Household Waste Bins': householdWasteBinMarkers,
+						'Recycling Drop-off': recyclingDropOffMarkers
+					}
+				)
 				.addTo(map);
 
 			// Add the layers to the map
